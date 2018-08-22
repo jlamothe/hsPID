@@ -1,38 +1,44 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Control.PID
-    ( PIDSettings (..)
-    , PIDStatus
-    , newPIDSettings
-    , newPIDStatus
+    ( Settings
+    , setpoint
+    , pFactor
+    , iFactor
+    , dFactor
+    , bias
+    , reversePID
+    , maxOutput
+    , Status
+    , newSettings
+    , newStatus
     ) where
 
 import Control.Lens
 
-data PIDSettings a =
-  PIDSettings
-  { _pidSetpoint      :: a
-  , _pidPFactor       :: a
-  , _pidIFactor       :: a
-  , _pidDFactor       :: a
-  , _pidBias          :: a
-  , _pidReversed      :: Bool
-  , _pidMaxOutput     :: a
-  , _pidIntegralLimit :: a
+data Settings a =
+  Settings
+  { _setpoint   :: a
+  , _pFactor    :: a
+  , _iFactor    :: a
+  , _dFactor    :: a
+  , _bias       :: a
+  , _reversePID :: Bool
+  , _maxOutput  :: a
   } deriving (Eq, Show)
 
-data PIDStatus a =
-  PIDStatus
-  { _pidSettings     :: PIDSettings a
-  , _pidLastError    :: a
-  , _pidLastIntegral :: a
+data Status a =
+  Status
+  { _settings     :: Settings a
+  , _lastError    :: a
+  , _lastIntegral :: a
   } deriving (Eq, Show)
 
-makeLenses ''PIDSettings
-makeLenses ''PIDStatus
+makeLenses ''Settings
+makeLenses ''Status
 
-newPIDSettings :: Fractional a => PIDSettings a
-newPIDSettings = PIDSettings 0 1 1 1 0 False 100 100
+newSettings :: Fractional a => Settings a
+newSettings = Settings 0 1 1 1 0 False 100
 
-newPIDStatus :: Fractional a => PIDStatus a
-newPIDStatus = PIDStatus newPIDSettings 0 0
+newStatus :: Fractional a => Status a
+newStatus = Status newSettings 0 0
