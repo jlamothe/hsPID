@@ -3,15 +3,15 @@ module Status (tests) where
 import Control.Lens
 import Test.HUnit
 
-import Control.PID
+import qualified Control.PID as PID
 
 tests :: Test
 tests = TestLabel "Status" $ TestList
-  [ TestLabel "settings" $     new^.settings     ~?= newSettings
-  , TestLabel "lastError" $    new^.lastError    ~?= 0
-  , TestLabel "lastIntegral" $ new^.lastIntegral ~?= 0
+  [ TestLabel "settings" $     new^.PID.settings     ~?= PID.newSettings
+  , TestLabel "lastError" $    new^.PID.lastError    ~?= 0
+  , TestLabel "lastIntegral" $ new^.PID.lastIntegral ~?= 0
   ]
 
-new = newStatus :: Status Rational
+new = PID.newStatus :: PID.Status Rational
 
 --jl
