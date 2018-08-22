@@ -3,6 +3,7 @@ import System.Exit
 import Test.HUnit
 
 import qualified Settings
+import qualified Status
 
 main :: IO ()
 main = do
@@ -10,4 +11,6 @@ main = do
   when (failures counts > 0 || errors counts > 0) exitFailure
 
 tests :: Test
-tests = TestList [Settings.tests]
+tests = TestList [Settings.tests, Status.tests]
+
+--jl

@@ -12,13 +12,13 @@ tests = TestLabel "Settings" $ TestList
 
 newSettingsTests :: Test
 newSettingsTests = TestLabel "newSettings" $ TestList $
-  [ TestLabel "setpoint" $   settings^.setpoint   ~?= 0
-  , TestLabel "pFactor" $    settings^.pFactor    ~?= 1
-  , TestLabel "pidIFactor" $ settings^.iFactor    ~?= 1
-  , TestLabel "dFactor" $    settings^.dFactor    ~?= 1
-  , TestLabel "bias" $       settings^.bias       ~?= 0
-  , TestLabel "reversePID" $ settings^.reversePID ~?= False
-  , TestLabel "maxOutput" $  settings^.maxOutput  ~?= 100
+  [ TestLabel "setpoint" $   new^.setpoint   ~?= 0
+  , TestLabel "pFactor" $    new^.pFactor    ~?= 1
+  , TestLabel "pidIFactor" $ new^.iFactor    ~?= 1
+  , TestLabel "dFactor" $    new^.dFactor    ~?= 1
+  , TestLabel "bias" $       new^.bias       ~?= 0
+  , TestLabel "reversePID" $ new^.reversePID ~?= False
+  , TestLabel "maxOutput" $  new^.maxOutput  ~?= 100
   ]
 
-settings = newSettings :: Settings Rational
+new = newSettings :: Settings Rational
