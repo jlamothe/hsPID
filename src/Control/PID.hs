@@ -2,6 +2,7 @@
 
 module Control.PID
     ( Settings
+    , Status
     , setpoint
     , pFactor
     , iFactor
@@ -9,7 +10,9 @@ module Control.PID
     , bias
     , reversePID
     , maxOutput
-    , Status
+    , settings
+    , lastError
+    , lastIntegral
     , newSettings
     , newStatus
     ) where
@@ -42,3 +45,5 @@ newSettings = Settings 0 1 1 1 0 False 100
 
 newStatus :: Fractional a => Status a
 newStatus = Status newSettings 0 0
+
+--jl
