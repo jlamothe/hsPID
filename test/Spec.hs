@@ -2,6 +2,7 @@ import Control.Monad
 import System.Exit
 import Test.HUnit
 
+import qualified Run
 import qualified Settings
 import qualified Status
 
@@ -11,6 +12,6 @@ main = do
   when (failures counts > 0 || errors counts > 0) exitFailure
 
 tests :: Test
-tests = TestList [Settings.tests, Status.tests]
+tests = TestList [Settings.tests, Status.tests, Run.tests]
 
 --jl
