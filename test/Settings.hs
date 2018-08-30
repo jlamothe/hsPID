@@ -3,7 +3,7 @@ module Settings where
 import Control.Lens
 import Test.HUnit
 
-import qualified Control.PID as PID
+import Control.PID
 
 tests :: Test
 tests = TestLabel "Settings" $ TestList
@@ -12,13 +12,13 @@ tests = TestLabel "Settings" $ TestList
 
 newSettingsTests :: Test
 newSettingsTests = TestLabel "newSettings" $ TestList $
-  [ TestLabel "setpoint" $   new^.PID.setpoint  ~?= 0
-  , TestLabel "pFactor" $    new^.PID.pFactor   ~?= 1
-  , TestLabel "pidIFactor" $ new^.PID.iFactor   ~?= 1
-  , TestLabel "dFactor" $    new^.PID.dFactor   ~?= 1
-  , TestLabel "bias" $       new^.PID.bias      ~?= 0
-  , TestLabel "reversePID" $ new^.PID.reversed  ~?= False
-  , TestLabel "maxOutput" $  new^.PID.maxOutput ~?= 100
+  [ TestLabel "setpoint" $   new^.setpoint   ~?= 0
+  , TestLabel "pFactor" $    new^.pFactor    ~?= 1
+  , TestLabel "pidIFactor" $ new^.iFactor    ~?= 1
+  , TestLabel "dFactor" $    new^.dFactor    ~?= 1
+  , TestLabel "bias" $       new^.bias       ~?= 0
+  , TestLabel "isReversed" $ new^.isReversed ~?= False
+  , TestLabel "maxOutput" $  new^.maxOutput  ~?= 100
   ]
 
-new = PID.newSettings :: PID.Settings Rational
+new = newSettings :: Settings Rational
