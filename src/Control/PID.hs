@@ -8,7 +8,7 @@ module Control.PID
     , iFactor
     , dFactor
     , bias
-    , reversed
+    , isReversed
     , maxOutput
     , settings
     , lastError
@@ -17,7 +17,7 @@ module Control.PID
     , newStatus
     ) where
 
-import qualified Control.Lens as L
+import Control.Lens
 
 data Settings a =
   Settings
@@ -26,7 +26,7 @@ data Settings a =
   , _iFactor   :: a
   , _dFactor   :: a
   , _bias      :: a
-  , _reversed  :: Bool
+  , _isReversed  :: Bool
   , _maxOutput :: a
   } deriving (Eq, Show)
 
@@ -37,8 +37,8 @@ data Status a =
   , _lastIntegral :: a
   } deriving (Eq, Show)
 
-L.makeLenses ''Settings
-L.makeLenses ''Status
+makeLenses ''Settings
+makeLenses ''Status
 
 newSettings :: Fractional a => Settings a
 newSettings = Settings 0 1 1 1 0 False 100
