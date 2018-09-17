@@ -9,7 +9,26 @@ tests :: Test
 tests = TestLabel "run" $ TestList [propTests]
 
 propTests :: Test
-propTests = TestLabel "proportional" $ TestList $ map propTest []
+propTests = TestLabel "proportional" $ TestList $ map propTest
+  --  input setpoint factor bias reversed expected
+  [ ( 0,    0,       1,     0,   False,   0        )
+  , ( 1,    0,       1,     0,   False,   1        )
+  , ( 2,    1,       1,     0,   False,   1        )
+  , ( 1,    0,       2,     0,   False,   2        )
+  , ( 0,    0,       1,     50,  False,   50       )
+  , ( 1,    0,       1,     50,  False,   51       )
+  , ( 1,    0,       2,     50,  False,   52       )
+  , ( -1,   0,       1,     50,  False,   49       )
+  , ( 0,    0,       1,     100, False,   100      )
+  , ( -1,   0,       1,     100, False,   99       )
+  , ( 0,    0,       1,     0,   True,    0        )
+  , ( -1,   0,       1,     0,   True,    1        )
+  , ( 0,    0,       1,     50,  True,    50       )
+  , ( -1,   0,       1,     50,  True,    51       )
+  , ( 1,    0,       1,     50,  True,    49       )
+  , ( 0,    0,       1,     100, True,    100      )
+  , ( 1,    0,       1,     100, True,    99       )
+  ]
 
 propTest
   :: (Rational, Rational, Rational, Rational, Bool, Rational)
