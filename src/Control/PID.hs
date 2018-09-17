@@ -48,6 +48,11 @@ newStatus :: Fractional a => Status a
 newStatus = Status newSettings 0 0
 
 run :: Fractional n => n -> n -> Status n -> (n, Status n)
-run = undefined
+run dt x s = (out, s) where
+  out = if s^.settings.isReversed
+    then b - p
+    else b + p
+  b = s^.settings.bias
+  p = (s^.settings.pFactor) * (x - (s^.settings.setpoint))
 
 --jl
