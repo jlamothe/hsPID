@@ -6,7 +6,7 @@ import Test.HUnit
 import Control.PID
 
 tests :: Test
-tests = TestLabel "run" $ TestList [propTests]
+tests = TestLabel "run" $ TestList [propTests, intTests]
 
 propTests :: Test
 propTests = TestLabel "proportional" $ TestList $ map propTest
@@ -44,6 +44,41 @@ propTest (x, sp, k, b, r, expect) =
     set (settings.setpoint) sp $
     set (settings.pFactor) k $
     set (settings.iFactor) 0 $
+    set (settings.dFactor) 0 $
+    set (settings.bias) b $
+    set (settings.isReversed) r
+    newStatus
+
+intTests :: Test
+intTests = TestLabel "integral" $ TestList $ map intTest []
+
+intTest
+  :: ( Rational
+     , Rational
+     , Rational
+     , Rational
+     , Rational
+     , Rational
+     , Rational
+     , Bool
+     , Rational
+     )
+  -> Test
+intTest (t1, x1, t2, x2, sp, k, b, r, expect) =
+  TestLabel label $ out ~?= expect where
+  label = "time1=" ++ show t1 ++
+    ", input1=" ++ show x1 ++
+    ", time2=" ++ show t2 ++
+    ", input2=" ++ show x2 ++
+    ", setpoint=" ++ show sp ++
+    ", factor=" ++ show k ++
+    ", bias=" ++ show b ++
+    ", reversed=" ++ show r
+  (out, _) = run t2 x2 s2
+  (_, s2) = run t1 x1 s1
+  s1 = set (settings.setpoint) sp $
+    set (settings.pFactor) 0 $
+    set (settings.iFactor) k $
     set (settings.dFactor) 0 $
     set (settings.bias) b $
     set (settings.isReversed) r
