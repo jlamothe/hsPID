@@ -15,6 +15,7 @@ module Control.PID
     , lastIntegral
     , newSettings
     , newStatus
+    , run
     ) where
 
 import Control.Lens
@@ -45,5 +46,8 @@ newSettings = Settings 0 1 1 1 0 False 100
 
 newStatus :: Fractional a => Status a
 newStatus = Status newSettings 0 0
+
+run :: Fractional n => n -> n -> Status n -> (n, Status n)
+run = undefined
 
 --jl
