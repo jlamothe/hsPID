@@ -5,10 +5,8 @@ import Test.HUnit
 
 import Control.PID
 
-tests :: Test
 tests = TestLabel "run" $ TestList [propTests, intTests]
 
-propTests :: Test
 propTests = TestLabel "proportional" $ TestList $ map propTest
   --  input setpoint factor bias reversed expected
   [ ( 0,    0,       1,     0,   False,   0        )
@@ -30,9 +28,6 @@ propTests = TestLabel "proportional" $ TestList $ map propTest
   , ( 1,    0,       1,     100, True,    99       )
   ]
 
-propTest
-  :: (Rational, Rational, Rational, Rational, Bool, Rational)
-  -> Test
 propTest (x, sp, k, b, r, expect) =
   TestLabel label $ out ~?= expect where
   label = "input=" ++ show x ++
@@ -49,21 +44,20 @@ propTest (x, sp, k, b, r, expect) =
     set (settings.isReversed) r
     newStatus
 
-intTests :: Test
-intTests = TestLabel "integral" $ TestList $ map intTest []
+intTests = TestLabel "integral" $ TestList $ map intTest
+  --  time1 input1 time2 input2 setpoint factor bias reversed expected
+  [ ( 1,    0,     1,    0,     0,       1,     0,   False,   0        )
+  , ( 1,    1,     1,    1,     0,       1,     0,   False,   2        )
+  , ( 1,    2,     1,    2,     1,       1,     0,   False,   2        )
+  , ( 1,    1,     2,    1,     0,       1,     0,   False,   3        )
+  , ( 1,    2,     1,    1,     0,       1,     0,   False,   3        )
+  , ( 2,    1,     2,    1,     0,       1,     0,   False,   4        )
+  , ( 1,    1,     1,    1,     0,       2,     0,   False,   4        )
+  , ( 1,    1,     1,    1,     0,       1,     50,  False,   52       )
+  , ( 1,    1,     1,    1,     0,       1,     50,  True,    48       )
+  , ( 1,    1,     1,    1,     0,       1,     100, True,    98       )
+  ]
 
-intTest
-  :: ( Rational
-     , Rational
-     , Rational
-     , Rational
-     , Rational
-     , Rational
-     , Rational
-     , Bool
-     , Rational
-     )
-  -> Test
 intTest (t1, x1, t2, x2, sp, k, b, r, expect) =
   TestLabel label $ out ~?= expect where
   label = "time1=" ++ show t1 ++
