@@ -48,11 +48,14 @@ newStatus :: Fractional a => Status a
 newStatus = Status newSettings 0 0
 
 run :: Fractional n => n -> n -> Status n -> (n, Status n)
-run dt x s = (out, s) where
+run dt x s = (out, s') where
   out = if s^.settings.isReversed
-    then b - p
-    else b + p
+    then b - p - i
+    else b + p + i
+  s' = over lastIntegral (\x -> x + dt * err) s
   b = s^.settings.bias
-  p = (s^.settings.pFactor) * (x - (s^.settings.setpoint))
+  p = (s^.settings.pFactor) * err
+  i = (s^.settings.iFactor) * (s'^.lastIntegral)
+  err = x - (s^.settings.setpoint)
 
 --jl
