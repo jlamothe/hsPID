@@ -91,6 +91,7 @@ derivTests = TestLabel "derivative" $ TestList $ map derivTest
   , ( 1,   0,  0,  1,  0,  1,     50,  False,   51       )
   , ( 1,   0,  0,  1,  0,  1,     50,  True,    49       )
   , ( 1,   0,  0,  1,  0,  1,     100, True,    99       )
+  , ( 0,   0,  0,  1,  0,  1,     0,   False,   0        )
   ]
 
 derivTest (t, x1, sp1, x2, sp2, k, b, r, expect) =
