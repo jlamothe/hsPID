@@ -5,7 +5,12 @@ import Test.HUnit
 
 import Control.PID
 
-tests = TestLabel "run" $ TestList [propTests, intTests, derivTests]
+tests = TestLabel "run" $ TestList
+  [ propTests
+  , intTests
+  , derivTests
+  , limitTests
+  ]
 
 propTests = TestLabel "proportional" $ TestList $ map propTest
   --  input setpoint factor bias reversed expected
@@ -113,5 +118,19 @@ derivTest (t, x1, sp1, x2, sp2, k, b, r, expect) =
     set (settings.bias) b $
     set (settings.isReversed) r
     newStatus
+
+limitTests = TestLabel "output limits" $ TestList $ map limitTest
+  --  input max  expected
+  [ ( 999,  100, 100      )
+  , ( 999,  10,  10       )
+  , ( 0,    100, 0        )
+  , ( -999, 100, 0        )
+  ]
+
+limitTest (x, max, expect) = TestLabel label $ out ~?= expect where
+  label = "input=" ++ show x ++
+    ", max=" ++ show max
+  (out, _) = run 1 x s
+  s = set (settings.maxOutput) max newStatus
 
 --jl
