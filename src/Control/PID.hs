@@ -48,7 +48,8 @@ newStatus :: Fractional a => Status a
 newStatus = Status newSettings 0 0
 
 run :: (Eq n, Fractional n) => n -> n -> Status n -> (n, Status n)
-run dt x s = (out, s') where
+run dt x s = (out', s') where
+  out' = max 0 $ min (s^.settings.maxOutput) out
   out = if s^.settings.isReversed
     then b - p - i - d
     else b + p + i + d
