@@ -16,6 +16,7 @@ module Control.PID
     , newSettings
     , newStatus
     , run
+    , resetIntegral
     ) where
 
 import Control.Lens
