@@ -62,4 +62,7 @@ run dt x s = (out', s') where
     else (s^.settings.dFactor) * (err - (s^.lastError)) / dt
   err = x - (s^.settings.setpoint)
 
+  resetIntegral :: Num n => Status n -> Status n
+  resetIntegral = set lastIntegral 0
+
 --jl
