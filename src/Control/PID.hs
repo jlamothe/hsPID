@@ -23,54 +23,79 @@ License along with this program.  If not, see
 {-# LANGUAGE TemplateHaskell #-}
 
 module Control.PID
-    ( Settings
-    , Status
-    , setpoint
-    , pFactor
-    , iFactor
-    , dFactor
-    , bias
-    , isReversed
-    , maxOutput
-    , settings
-    , lastError
-    , lastIntegral
-    , newSettings
-    , newStatus
-    , run
-    , resetIntegral
-    ) where
+  ( Settings (..)
+  , Status (..)
+  , setpoint
+  , pFactor
+  , iFactor
+  , dFactor
+  , bias
+  , isReversed
+  , maxOutput
+  , settings
+  , lastError
+  , lastIntegral
+  , newSettings
+  , newStatus
+  , run
+  , resetIntegral
+  ) where
 
 import Control.Lens
 
+-- | PID control loop settings
 data Settings a =
   Settings
   { _setpoint  :: a
+    -- ^ the desired setpoint
   , _pFactor   :: a
+    -- ^ the proportional factor
   , _iFactor   :: a
+    -- ^ the integral factor
   , _dFactor   :: a
+    -- ^ the derivitave factor
   , _bias      :: a
+    -- ^ the output bias
   , _isReversed  :: Bool
+    -- ^ indicates whether or not the PID output is reversed
   , _maxOutput :: a
+    -- ^ the maximum PID output
   } deriving (Eq, Show)
 
+-- | PID status
 data Status a =
   Status
   { _settings     :: Settings a
+    -- ^ the PID loop's settings
   , _lastError    :: a
+    -- ^ the error on the last run of the PID loop
   , _lastIntegral :: a
+    -- ^ the accumulated integral (without factor)
   } deriving (Eq, Show)
 
 makeLenses ''Settings
 makeLenses ''Status
 
+-- | the default PID settings
+-- These will probably need tuning.
 newSettings :: Fractional a => Settings a
 newSettings = Settings 0 1 1 1 0 False 100
 
+-- | an inital PID state with the default PID settings
 newStatus :: Fractional a => Status a
 newStatus = Status newSettings 0 0
 
-run :: (Ord n, Fractional n) => n -> n -> Status n -> (n, Status n)
+-- | runs the PID loop
+run
+  :: (Ord n, Fractional n)
+  => n
+     -- ^ the amount of time elapsed since the PID loop was last run
+  -> n
+     -- ^ the current input value
+  -> Status n
+     -- ^ the current PID status
+  -> (n, Status n)
+     -- ^ the output and updated PID status
 run dt x s = (out', s') where
   out' = max 0 $ min (s^.settings.maxOutput) out
   out = if s^.settings.isReversed
@@ -85,7 +110,13 @@ run dt x s = (out', s') where
     else (s^.settings.dFactor) * (err - (s^.lastError)) / dt
   err = x - (s^.settings.setpoint)
 
-resetIntegral :: Num n => Status n -> Status n
+-- | resets the integral of a PID loop
+resetIntegral
+  :: Num n
+  => Status n
+     -- ^ the PID status being reset
+  -> Status n
+     -- ^ the updated PID status
 resetIntegral = set lastIntegral 0
 
 --jl
