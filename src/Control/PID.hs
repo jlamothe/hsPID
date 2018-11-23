@@ -1,6 +1,11 @@
-{-
+{-|
 
-hsPID
+Module      : Control.PID
+Description : provides PID control loop functionality
+Copyright   : Jonathan Lamothe
+License     : LGPL-3
+Maintainer  : jlamothe1980@gmail.com
+
 Copyright (C) 2018 Jonathan Lamothe
 <jlamothe1980@gmail.com>
 
