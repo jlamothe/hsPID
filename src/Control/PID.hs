@@ -62,7 +62,7 @@ data Settings a =
   , _iFactor   :: a
     -- ^ the integral factor
   , _dFactor   :: a
-    -- ^ the derivatave factor
+    -- ^ the derivative factor
   , _bias      :: a
     -- ^ the output bias
   , _isReversed  :: Bool
